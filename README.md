@@ -30,7 +30,7 @@ and Softmax. A skeleton implementation together with some utility functions for 
 
 To complete the coursework, you should use the Numpy and Matplolib in Python 3. For coursework 1, you should not use any neural network library which provides autograd functionality, such as PyTorch or TensorFlow.
 
-# Task 1 (1 %). Extend the code by implementing the softmax function which computes a probability
+### Task 1 (1 %). Extend the code by implementing the softmax function which computes a probability
 
 vector (p1;:::;p10) from the 10 activation units z1L;:::;z10 in the softmax layer.
 
@@ -68,7 +68,7 @@ array([7.80134161e-05, 2.12062451e-04, 5.76445508e-04, 1.56694135e-03,
 
 4.25938820e-03, 1.15782175e-02, 3.14728583e-02, 8.55520989e-02, 2.32554716e-01, 6.32149258e-01])
 
-# Task 2 (3 %). Extend the code by implementing the forward function which sets the activation units in the input layer to an input image x, then feeds forward the data through the network, and nally returns the probability vector corresponding to the 10 probability units in the output layer.
+### Task 2 (3 %). Extend the code by implementing the forward function which sets the activation units in the input layer to an input image x, then feeds forward the data through the network, and nally returns the probability vector corresponding to the 10 probability units in the output layer.
 
 Input arguments:
 
@@ -88,7 +88,7 @@ array([0.10425727, 0.09743926, 0.0998025 , 0.09768295, 0.1084072 ,
 
 0.09732901, 0.08471379, 0.09933064, 0.09877855, 0.11225882])
 
-# Task 3 (1 %). We used the maximum likelihood principle to derive a loss function
+### Task 3 (1 %). We used the maximum likelihood principle to derive a loss function
 
 C(i) := logp (i);
 
@@ -117,7 +117,7 @@ array([0.09371258, 0.10556965, 0.09432195, 0.10503915, 0.12660278,
 
 2.0667007822344643
 
-# Task 4 (5 %). Extend the code by implementing the backward function which rst computes the local gradients self.delta[l] for each layer in the network, then evaluates the partial derivatives of the cost relative to the weights self.dw[l] and the biases self.db[l] for each layer in the network.
+### Task 4 (5 %). Extend the code by implementing the backward function which rst computes the local gradients self.delta[l] for each layer in the network, then evaluates the partial derivatives of the cost relative to the weights self.dw[l] and the biases self.db[l] for each layer in the network.
 
 Before the backward function is called, you can assume that the forward function has been called with an appropriate input vector x.
 
@@ -177,7 +177,7 @@ array([[ 0. , 0. , 0. , ..., 0. ,
 
 \0. , 0. ]])
 
-# Task 5 (5 %). Complete the code in backprop-softmax.py by implementing the places marked TODO.
+### Task 5 (5 %). Complete the code in backprop-softmax.py by implementing the places marked TODO.
 
 Example:
 
@@ -189,7 +189,7 @@ Extracting fashion-mnist/data/fashion/train-images-idx3-ubyte.gz Extracting fash
 
 ![](Readme/cw1-2020.010.png)![](Readme/cw1-2020.011.png)
 
-# Task 6 (10 %). Design a set of experiments to investigate how the following hyper-parameters aect classi cation accuracy: training time, learning rate, minibatch size, network topology, and activation function.
+### Task 6 (10 %). Design a set of experiments to investigate how the following hyper-parameters aect classi cation accuracy: training time, learning rate, minibatch size, network topology, and activation function.
 
 What is the best classication accuracy you can achieve on the test data? Summarise your ndings in a report of at most 5 pages (A4 page, 11pt font). The report should clearly state the experiments you have carried out, including the method, the results, and your interpretation of the results.
 PAGE5
