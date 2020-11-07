@@ -12,13 +12,14 @@ import fnn_utils
 # Choose which one to use by updating the variable phi in the code below.
 
 def sigmoid(x):
-    return # TODO
+    return 1/(1 + np.exp(-x))
 def sigmoid_d(x):
-    return # TODO
+    s = sigmoid(x)
+    return s * (1-s)
 def relu(x):
-    return # TODO
+    return x * (x > 0)
 def relu_d(x):
-    return # TODO
+    return 1 * (x > 0)
        
 class BackPropagation:
 
