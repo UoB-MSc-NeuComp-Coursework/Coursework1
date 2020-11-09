@@ -66,7 +66,7 @@ class BackPropagation:
 
     def softmax(self, z):
         # TODO        
-        return ... 
+        return np.exp(z) / sum(np.exp(z))
 
     def loss(self, pred, y):
         # TODO
