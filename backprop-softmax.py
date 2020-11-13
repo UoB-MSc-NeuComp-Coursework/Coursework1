@@ -74,7 +74,11 @@ class BackPropagation:
     def backward(self,x, y):
         """ Compute local gradients, then return gradients of network.
         """
-        # TODO
+        self.delta = self.a[self.L-1] - y # computes the local gradients for each layer of the network.
+        self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1])) # computes the local gradients with respect to the weights.
+        self.db = self.delta # computes the local gradients with respect to biases.
+
+        return self.delta, self.dw, self.db # returns the gradients of the network.
 
     # Return predicted image class for input x
     def predict(self, x):
