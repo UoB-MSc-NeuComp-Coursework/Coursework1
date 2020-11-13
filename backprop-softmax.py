@@ -149,7 +149,8 @@ class BackPropagation:
                     # TODO
                     
                     # Compute gradients
-                    # TODO
+                    self.dw = self.dw[i]
+                    self.db = self.db[i]
 
                     # Update loss log
                     batch_loss += self.loss(self.a[self.L-1], y)
@@ -159,8 +160,8 @@ class BackPropagation:
                                     
                 # Update the weights at the end of the mini-batch using gradient descent
                 for l in range(1,self.L):
-                    self.w[l] = # TODO
-                    self.b[l] = # TODO
+                    self.w[l] = epsilon * self.dw[l]
+                    self.b[l] = epsilon * self.db[l]
                 
                 # Update logs
                 loss_log.append( batch_loss / batch_size )
