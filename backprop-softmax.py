@@ -82,11 +82,12 @@ class BackPropagation:
 
     # Return predicted image class for input x
     def predict(self, x):
-        return # TODO
+        y_pred = np.argmax(self.forward(x), axis=1)
+        return y_pred
 
     # Return predicted percentage for class j
     def predict_pct(self, j):
-        return # TODO 
+        return self.forward(self.z)[j]
     
     def evaluate(self, X, Y, N):
         """ Evaluate the network on a random subset of size N. """
