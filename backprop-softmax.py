@@ -150,6 +150,8 @@ class BackPropagation:
             for k in range(num_batches):
                 
                 # Reset buffer containing updates
+                nabla_b = [np.zeros(b.shape) for b in self.b]
+                nabla_w = [np.zeros(w.shape) for w in self.w]
                 # TODO
                 
                 # Mini-batch loop
@@ -160,11 +162,14 @@ class BackPropagation:
                     y = self.trainY[permutation[k*batch_size+i]]
 
                     # Feed forward inputs
+                    self.a[self.L - 1] = self.forward(x)
                     # TODO
                     
                     # Compute gradients
-                    self.dw = self.dw[i]
-                    self.db = self.db[i]
+                    dw, db = self.backward(x, y)[0], self.backward(x, y)[1]   # TODO
+
+                    nabla_b = [n_b + d_b for n_b, d_b in zip(nabla_b, db)]
+                    nabla_w = [n_w + d_w for n_w, d_w in zip(nabla_w, dw)]
 
                     # Update loss log
                     batch_loss += self.loss(self.a[self.L-1], y)
@@ -174,8 +179,8 @@ class BackPropagation:
                                     
                 # Update the weights at the end of the mini-batch using gradient descent
                 for l in range(1,self.L):
-                    self.w[l] = epsilon * self.dw[l]
-                    self.b[l] = epsilon * self.db[l]
+                    self.w[l] = self.w[l] - (epsilon * (nabla_w[l]/batch_size)) # TODO
+                    self.b[l] = self.b[l] - (epsilon * (nabla_b[l]/batch_size))
                 
                 # Update logs
                 loss_log.append( batch_loss / batch_size )
