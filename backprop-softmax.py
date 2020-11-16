@@ -218,7 +218,9 @@ class BackPropagation:
 def main():
     bp = BackPropagation()
     bp.sgd()
-
+    print('train accuracy: ' + str(bp.evaluate(bp.trainX, bp.trainY, 6000)))
+    print('test accuracy: ' + str(bp.evaluate(bp.testX, bp.testY, 1000)))
+    
 if __name__ == "__main__":
     main()
     
