@@ -87,11 +87,11 @@ class BackPropagation:
     def backward(self,x, y):
         """ Compute local gradients, then return gradients of network.
         """
-        self.delta = self.a[self.L-1] - y # computes the local gradients for each layer of the network.
-        self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1])) # computes the local gradients with respect to the weights.
-        self.db = self.delta # computes the local gradients with respect to biases.
+        self.delta = self.a[self.L-1] - y  # computes the local gradients for each layer of the network.
+        self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1]))  # computes the local gradients with respect to the weights.
+        self.db = self.delta  # computes the local gradients with respect to biases.
 
-        return self.delta, self.dw, self.db # returns the gradients of the network.
+        return self.delta, self.dw, self.db  # returns the gradients of the network.
 
     # Return predicted image class for input x
     def predict(self, x):
@@ -143,8 +143,8 @@ class BackPropagation:
             permutation = np.random.permutation(N)
             
             # Evaluate the accuracy on 1000 samples from the training and test data
-            test_acc_log.append( self.evaluate(self.testX, self.testY, 1000) )
-            train_acc_log.append( self.evaluate(self.trainX, self.trainY, 1000))
+            test_acc_log.append(self.evaluate(self.testX, self.testY, 1000))
+            train_acc_log.append(self.evaluate(self.trainX, self.trainY, 1000))
             batch_loss = 0
 
             for k in range(num_batches):
