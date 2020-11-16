@@ -62,18 +62,13 @@ class BackPropagation:
         # TODO
         inp = (x - np.amin(x)) / (np.amax(x) - np.amin(x))
         self.a[0] = inp - 0.5  # Center the input values between [-0.5,0.5]
-
-        self.z[1] = np.dot(self.w[1], self.a[0]) + self.b[1]
-        self.a[self.L-4] = self.phi(self.z[1])
-
-        self.z[2] = np.dot(self.w[2], self.a[self.L-4]) + self.b[2]
-        self.a[self.L-3] = self.phi(self.z[2])
-
-        self.z[3] = np.dot(self.w[3], self.a[self.L-3]) + self.b[3]
-        self.a[self.L-2] = self.phi(self.z[3])
-
-        self.z[4] = np.dot(self.w[4], self.a[self.L-2]) + self.b[4]
-        self.a[self.L - 1] = self.softmax(self.z[4])
+        for i in range(1, self.L - 1):
+            self.z[i] = np.dot(self.w[i], self.a[i-1]) + self.b[i]
+            self.a[i] = self.phi(self.z[i])
+            
+        self.z[self.L - 1] = np.dot(self.w[self.L - 1], self.a[self.L - 2]) + self.b[self.L - 1]
+        self.a[self.L - 1] = self.softmax(self.z[self.L - 1])
+        
         return(self.a[self.L-1])
 
     def softmax(self, z):
