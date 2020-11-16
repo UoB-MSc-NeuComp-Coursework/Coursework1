@@ -87,6 +87,7 @@ class BackPropagation:
         self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1]))  # computes the local gradients with respect to the weights.
         self.db = self.delta  # computes the local gradients with respect to biases.
         '''
+        network_shape = [784, 20, 20, 20, 10]
         output = self.forward(x)
         self.delta[self.L - 1] = output - y
         self.dw[self.L - 1] = np.dot(self.delta[self.L - 1].reshape(network_shape[4], 1),
