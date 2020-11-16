@@ -82,16 +82,10 @@ class BackPropagation:
     def backward(self,x, y):
         """ Compute local gradients, then return gradients of network.
         """
-        '''
-        self.delta = self.a[self.L-1] - y  # computes the local gradients for each layer of the network.
-        self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1]))  # computes the local gradients with respect to the weights.
-        self.db = self.delta  # computes the local gradients with respect to biases.
-        '''
-        network_shape = [784, 20, 20, 20, 10]
         output = self.forward(x)
         self.delta[self.L - 1] = output - y
         self.dw[self.L - 1] = np.dot(self.delta[self.L - 1].reshape(np.size(self.b[self.L - 1]), 1),
-                            self.a[3].reshape(1, np.size(self.b[self.L - 2])))  # (10,20)
+                            self.a[self.L - 2].reshape(1, np.size(self.b[self.L - 2])))  # (10,20)
         self.db[self.L - 1] = self.delta[self.L - 1]  # (10,)
 
         for j in range(self.L - 2, 0, -1):
