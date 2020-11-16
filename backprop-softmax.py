@@ -95,7 +95,7 @@ class BackPropagation:
 
     # Return predicted percentage for class j
     def predict_pct(self, j):
-        return self.forward(self.x)[j]
+        return self.a[self.L - 1][j]
     
     def evaluate(self, X, Y, N):
         """ Evaluate the network on a random subset of size N. """
