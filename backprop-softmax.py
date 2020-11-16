@@ -20,6 +20,22 @@ def relu(x):
     return x * (x > 0)
 def relu_d(x):
     return 1 * (x > 0)
+def swish(x):
+    sig = sigmoid(x)
+    return x * sig
+def swish_d(x):
+    swi = swish(x)
+    sig = sigmoid(x)
+    return swi + sig*(1-swi)
+def tanh(x):
+    return 2/(1+np.exp(-2*x)) - 1
+def tanh_d(x):
+    t = tanh(x)
+    return 1-(t)**2
+def linear(x):
+    return x
+def linear_d(x):
+    return 1
        
 class BackPropagation:
 
@@ -115,7 +131,7 @@ class BackPropagation:
     def sgd(self,
             batch_size=50,
             epsilon=0.01,
-            epochs=1000):
+            epochs=40):
 
         """ Mini-batch gradient descent on training data.
 
