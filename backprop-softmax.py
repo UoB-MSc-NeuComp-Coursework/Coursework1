@@ -217,9 +217,12 @@ class BackPropagation:
 
 def main():
     bp = BackPropagation()
+    strat = time.time()
     bp.sgd()
     print('train accuracy: ' + str(bp.evaluate(bp.trainX, bp.trainY, 6000)))
     print('test accuracy: ' + str(bp.evaluate(bp.testX, bp.testY, 1000)))
+    print('time(s): ' + str(time.time() - start))
+    print('time(m): ' + str((time.time() - start) / 60)) 
     
 if __name__ == "__main__":
     main()
