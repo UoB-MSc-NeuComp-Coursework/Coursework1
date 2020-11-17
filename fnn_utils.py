@@ -7,11 +7,11 @@ import numpy as np
 plt.close("all")
 
 fig, axarr = plt.subplots(3,figsize=(10, 15))
-fig.show(block=True)
+fig.show()
 
 nx,ny = 5, 5    
 fig_p, axarr_p = plt.subplots(ny,nx,figsize=(15,15))
-fig_p.show(block=True)
+fig_p.show()
 
 def display_predictions(network,show_pct=False):
     fashion = ["T-shirt","Trouser","Pullover","Dress", "Coat","Sandal","Shirt","Sneaker","Bag","Boot"]

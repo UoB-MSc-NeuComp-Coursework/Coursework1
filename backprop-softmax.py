@@ -132,7 +132,7 @@ class BackPropagation:
     def sgd(self,
             batch_size=50,
             epsilon=0.01,
-            epochs=40):
+            epochs=1):
 
         """ Mini-batch gradient descent on training data.
 
