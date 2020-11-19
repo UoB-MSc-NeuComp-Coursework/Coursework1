@@ -76,19 +76,18 @@ class BackPropagation:
             feed forward through the layers, then return the activations of the last layer.
         """
 
-        inp = (x - np.amin(x)) / (np.amax(x) - np.amin(x))
+        inp = (x - np.amin(x)) / (np.amax(x) - np.amin(x)) #Normalisation [0.0, 0.1]
         self.a[0] = inp - 0.5  # Center the input values between [-0.5,0.5]
         for i in range(1, self.L - 1):
             self.z[i] = np.dot(self.w[i], self.a[i-1]) + self.b[i]
             self.a[i] = self.phi(self.z[i])
             
         self.z[self.L - 1] = np.dot(self.w[self.L - 1], self.a[self.L - 2]) + self.b[self.L - 1]
-        self.a[self.L - 1] = self.softmax(self.z[self.L - 1])
+        self.a[self.L - 1] = self.softmax(self.z[self.L - 1]) #output
         
         return(self.a[self.L-1])
 
     def softmax(self, z):
-
         return np.exp(z) / sum(np.exp(z))
 
     def loss(self, pred, y):
@@ -98,22 +97,16 @@ class BackPropagation:
     def backward(self,x, y):
         """ Compute local gradients, then return gradients of network.
         """
-        '''
-        self.delta = self.a[self.L-1] - y  # computes the local gradients for each layer of the network.
-        self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1]))  # computes the local gradients with respect to the weights.
-        self.db = self.delta  # computes the local gradients with respect to biases.
-        '''
-        network_shape = [784, 20, 20, 20, 20, 10]
         output = self.forward(x)
-        self.delta[self.L - 1] = output - y
+        self.delta[self.L - 1] = output - y #delta for softmax
         self.dw[self.L - 1] = np.dot(self.delta[self.L - 1].reshape(np.size(self.b[self.L - 1]), 1),
-                            self.a[self.L - 2].reshape(1, np.size(self.b[self.L - 2])))  # (10,20)
+                            self.a[self.L - 2].reshape(1, np.size(self.b[self.L - 2])))  
         self.db[self.L - 1] = self.delta[self.L - 1]  # (10,)
 
-        for j in range(self.L - 2, 0, -1):
-            self.delta[j] = np.dot(self.delta[j+1], self.w[j+1]) * self.phi_d(self.z[j])  # (20,)
+        for j in range(self.L - 2, 0, -1): #update delta, w, b for middle layers
+            self.delta[j] = np.dot(self.delta[j+1], self.w[j+1]) * self.phi_d(self.z[j]) 
             self.dw[j] = np.dot(self.delta[j].reshape(np.size(self.b[j]), 1),
-                            self.a[j-1].reshape(1, np.size(self.b[j-1])))  # (20,20)
+                            self.a[j-1].reshape(1, np.size(self.b[j-1])))  
             self.db[j] = self.delta[j]
         return self.dw, self.db  # returns the gradients of the network.
 
