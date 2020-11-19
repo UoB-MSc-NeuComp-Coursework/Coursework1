@@ -13,7 +13,7 @@ fig.show()
 
 nx,ny = 5, 5
 fig_p, axarr_p = plt.subplots(ny,nx,figsize=(15,15))
-#fig_p.show()
+fig_p.show()
 
 
 
