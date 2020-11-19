@@ -54,7 +54,7 @@ class BackPropagation:
     # input pixels), and 10 output units, one for each of the ten
     # classes.
 
-    def __init__(self,network_shape=[784, 20 , 20, 20, 10]):  #network_shape=(5)[784,20,20,20,10]   (8)[784,20,20,20, 20, 20, 20, 10]
+    def __init__(self,network_shape=[784, 128 , 20, 20, 10]):  #network_shape=(5)[784,20,20,20,10]   (8)[784,20,20,20, 20, 20, 20, 10]
 
         # Read the training and test data using the provided utility functions
         self.trainX, self.trainY, self.testX, self.testY = fnn_utils.read_data()
@@ -139,7 +139,7 @@ class BackPropagation:
     
     def sgd(self,
             batch_size=50,
-            epsilon=0.01,
+            epsilon=0.1,
             epochs=150):
 
         """ Mini-batch gradient descent on training data.
@@ -176,7 +176,7 @@ class BackPropagation:
 
             print('\n Epochs'+str(t)+'  Test acc: '+str(test_acc_log[t])+' Train acc: ' +str(train_acc_log[t])+' Max Test acc: '+ str(max(test_acc_log))+' Max Train acc: '+str(max(train_acc_log)))
 
-            for k in tqdm(range(num_batches)):
+            for k in range(num_batches): #use tqdm here to show progress bar
                 # Reset buffer containing updates
                 nabla_b = [np.zeros(b.shape) for b in self.b]
                 nabla_w = [np.zeros(w.shape) for w in self.w]
@@ -237,13 +237,13 @@ class BackPropagation:
 
 def main():
     bp = BackPropagation()
-    start = time.time()
+    #start = time.time()
     bp.sgd()
-    print('train accuracy: ' + str(bp.evaluate(bp.trainX, bp.trainY, 6000)))
-    print('test accuracy: ' + str(bp.evaluate(bp.testX, bp.testY, 1000)))
-    print('time(s): ' + str(time.time() - start))
-    print('time(m): ' + str((time.time() - start) / 60))
-    plt.show(block=True)
+    #print('train accuracy: ' + str(bp.evaluate(bp.trainX, bp.trainY, 6000)))
+    #print('test accuracy: ' + str(bp.evaluate(bp.testX, bp.testY, 1000)))
+    #print('time(s): ' + str(time.time() - start))
+    #print('time(m): ' + str((time.time() - start) / 60))
+    #plt.show(block=True)
 if __name__ == "__main__":
     main()
     
