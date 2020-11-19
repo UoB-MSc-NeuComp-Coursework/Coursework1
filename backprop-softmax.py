@@ -21,7 +21,22 @@ def relu(x):
     return x * (x > 0)
 def relu_d(x):
     return 1 * (x > 0)
-       
+def swish(x):
+    sig = sigmoid(x)
+    return x * sig
+def swish_d(x):
+    swi = swish(x)
+    sig = sigmoid(x)
+    return swi + sig*(1-swi)
+def tanh(x):
+    return 2/(1+np.exp(-2*x)) - 1
+def tanh_d(x):
+    t = tanh(x)
+    return 1-(t)**2
+def linear(x):
+    return x
+def linear_d(x):
+    return 1
 class BackPropagation:
 
     # The network shape list describes the number of units in each
@@ -29,7 +44,7 @@ class BackPropagation:
     # input pixels), and 10 output units, one for each of the ten
     # classes.
 
-    def __init__(self,network_shape=[784, 30, 30, 30, 10]):  #network_shape=(5)[784,20,20,20,10]   (8)[784,20,20,20, 20, 20, 20, 10]
+    def __init__(self,network_shape=[784, 20 , 20, 20, 10]):  #network_shape=(5)[784,20,20,20,10]   (8)[784,20,20,20, 20, 20, 20, 10]
 
         # Read the training and test data using the provided utility functions
         self.trainX, self.trainY, self.testX, self.testY = fnn_utils.read_data()
@@ -78,7 +93,7 @@ class BackPropagation:
 
     def loss(self, pred, y):
         return -np.log(pred[np.argmax(y)])
- 
+
     
     def backward(self,x, y):
         """ Compute local gradients, then return gradients of network.
@@ -88,11 +103,11 @@ class BackPropagation:
         self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1]))  # computes the local gradients with respect to the weights.
         self.db = self.delta  # computes the local gradients with respect to biases.
         '''
-        network_shape = [784, 20, 20, 20, 10]
+        network_shape = [784, 20, 20, 20, 20, 10]
         output = self.forward(x)
         self.delta[self.L - 1] = output - y
         self.dw[self.L - 1] = np.dot(self.delta[self.L - 1].reshape(np.size(self.b[self.L - 1]), 1),
-                            self.a[3].reshape(1, np.size(self.b[self.L - 2])))  # (10,20)
+                            self.a[self.L - 2].reshape(1, np.size(self.b[self.L - 2])))  # (10,20)
         self.db[self.L - 1] = self.delta[self.L - 1]  # (10,)
 
         for j in range(self.L - 2, 0, -1):
@@ -122,7 +137,7 @@ class BackPropagation:
     def sgd(self,
             batch_size=50,
             epsilon=0.01,
-            epochs=40):
+            epochs=150):
 
         """ Mini-batch gradient descent on training data.
 
