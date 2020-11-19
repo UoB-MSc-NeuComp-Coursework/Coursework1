@@ -7,7 +7,8 @@
 import numpy as np
 import time
 import fnn_utils
-
+import matplotlib.pyplot as plt
+from tqdm import tqdm #bar showing
 # Some activation functions with derivatives.
 # Choose which one to use by updating the variable phi in the code below.
 
@@ -20,22 +21,6 @@ def relu(x):
     return x * (x > 0)
 def relu_d(x):
     return 1 * (x > 0)
-def swish(x):
-    sig = sigmoid(x)
-    return x * sig
-def swish_d(x):
-    swi = swish(x)
-    sig = sigmoid(x)
-    return swi + sig*(1-swi)
-def tanh(x):
-    return 2/(1+np.exp(-2*x)) - 1
-def tanh_d(x):
-    t = tanh(x)
-    return 1-(t)**2
-def linear(x):
-    return x
-def linear_d(x):
-    return 1
        
 class BackPropagation:
 
@@ -44,7 +29,7 @@ class BackPropagation:
     # input pixels), and 10 output units, one for each of the ten
     # classes.
 
-    def __init__(self,network_shape=[784,20,20,20,10]):
+    def __init__(self,network_shape=[784, 30, 30, 30, 10]):  #network_shape=(5)[784,20,20,20,10]   (8)[784,20,20,20, 20, 20, 20, 10]
 
         # Read the training and test data using the provided utility functions
         self.trainX, self.trainY, self.testX, self.testY = fnn_utils.read_data()
@@ -75,40 +60,45 @@ class BackPropagation:
         """ Set first activation in input layer equal to the input vector x (a 24x24 picture), 
             feed forward through the layers, then return the activations of the last layer.
         """
-        
-        inp = (x - np.amin(x)) / (np.amax(x) - np.amin(x)) #normalization [0.0, 1.0]
+
+        inp = (x - np.amin(x)) / (np.amax(x) - np.amin(x))
         self.a[0] = inp - 0.5  # Center the input values between [-0.5,0.5]
-        
         for i in range(1, self.L - 1):
             self.z[i] = np.dot(self.w[i], self.a[i-1]) + self.b[i]
             self.a[i] = self.phi(self.z[i])
             
         self.z[self.L - 1] = np.dot(self.w[self.L - 1], self.a[self.L - 2]) + self.b[self.L - 1]
-        self.a[self.L - 1] = self.softmax(self.z[self.L - 1]) # output for the last layer
+        self.a[self.L - 1] = self.softmax(self.z[self.L - 1])
         
         return(self.a[self.L-1])
 
     def softmax(self, z):
+
         return np.exp(z) / sum(np.exp(z))
 
     def loss(self, pred, y):
         return -np.log(pred[np.argmax(y)])
+ 
     
     def backward(self,x, y):
         """ Compute local gradients, then return gradients of network.
         """
+        '''
+        self.delta = self.a[self.L-1] - y  # computes the local gradients for each layer of the network.
+        self.dw = np.dot(self.delta, np.transpose(self.a[self.L-1]))  # computes the local gradients with respect to the weights.
+        self.db = self.delta  # computes the local gradients with respect to biases.
+        '''
+        network_shape = [784, 20, 20, 20, 10]
         output = self.forward(x)
-        self.delta[self.L - 1] = output - y #delta for the last layer in which the activation function is softmax, 
-                                            #this has to be changed when the activation function of the last layer is not softmax
-        
+        self.delta[self.L - 1] = output - y
         self.dw[self.L - 1] = np.dot(self.delta[self.L - 1].reshape(np.size(self.b[self.L - 1]), 1),
-                            self.a[self.L - 2].reshape(1, np.size(self.b[self.L - 2]))) 
-        self.db[self.L - 1] = self.delta[self.L - 1] 
+                            self.a[3].reshape(1, np.size(self.b[self.L - 2])))  # (10,20)
+        self.db[self.L - 1] = self.delta[self.L - 1]  # (10,)
 
-        for j in range(self.L - 2, 0, -1):#update the weights, the biases and the deltas of middle layers
-            self.delta[j] = np.dot(self.delta[j+1], self.w[j+1]) * self.phi_d(self.z[j])
+        for j in range(self.L - 2, 0, -1):
+            self.delta[j] = np.dot(self.delta[j+1], self.w[j+1]) * self.phi_d(self.z[j])  # (20,)
             self.dw[j] = np.dot(self.delta[j].reshape(np.size(self.b[j]), 1),
-                            self.a[j-1].reshape(1, np.size(self.b[j-1])))
+                            self.a[j-1].reshape(1, np.size(self.b[j-1])))  # (20,20)
             self.db[j] = self.delta[j]
         return self.dw, self.db  # returns the gradients of the network.
 
@@ -132,7 +122,7 @@ class BackPropagation:
     def sgd(self,
             batch_size=50,
             epsilon=0.01,
-            epochs=1):
+            epochs=40):
 
         """ Mini-batch gradient descent on training data.
 
@@ -166,12 +156,12 @@ class BackPropagation:
             train_acc_log.append(self.evaluate(self.trainX, self.trainY, 1000))
             batch_loss = 0
 
-            for k in range(num_batches):
-                
+            print('\n Epochs'+str(t)+'  Test acc: '+str(test_acc_log[t])+' Train acc: ' +str(train_acc_log[t])+' Max Test acc: '+ str(max(test_acc_log))+' Max Train acc: '+str(max(train_acc_log)))
+
+            for k in tqdm(range(num_batches)):
                 # Reset buffer containing updates
                 nabla_b = [np.zeros(b.shape) for b in self.b]
                 nabla_w = [np.zeros(w.shape) for w in self.w]
-                # TODO
                 
                 # Mini-batch loop
                 for i in range(batch_size):
@@ -182,9 +172,10 @@ class BackPropagation:
 
                     # Feed forward inputs
                     self.a[self.L - 1] = self.forward(x)
+
                     
                     # Compute gradients
-                    dw, db = self.backward(x, y)[0], self.backward(x, y)[1] 
+                    dw, db = self.backward(x, y)[0], self.backward(x, y)[1]
 
                     nabla_b = [n_b + d_b for n_b, d_b in zip(nabla_b, db)]
                     nabla_w = [n_w + d_w for n_w, d_w in zip(nabla_w, dw)]
@@ -223,6 +214,7 @@ class BackPropagation:
                     self.batch_a[l].fill(0.0)
 
 
+
 # Start training with default parameters.
 
 def main():
@@ -232,8 +224,8 @@ def main():
     print('train accuracy: ' + str(bp.evaluate(bp.trainX, bp.trainY, 6000)))
     print('test accuracy: ' + str(bp.evaluate(bp.testX, bp.testY, 1000)))
     print('time(s): ' + str(time.time() - start))
-    print('time(m): ' + str((time.time() - start) / 60)) 
-    
+    print('time(m): ' + str((time.time() - start) / 60))
+    plt.show(block=True)
 if __name__ == "__main__":
     main()
     
