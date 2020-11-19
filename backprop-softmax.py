@@ -174,7 +174,7 @@ class BackPropagation:
             train_acc_log.append(self.evaluate(self.trainX, self.trainY, 1000))
             batch_loss = 0
 
-            print('\n Epochs'+str(t)+'  Test acc: '+str(test_acc_log[t])+' Train acc: ' +str(train_acc_log[t])+' Max Test acc: '+ str(max(test_acc_log))+' Max Train acc: '+str(max(train_acc_log)))
+            #print('\n Epochs'+str(t)+'  Test acc: '+str(test_acc_log[t])+' Train acc: ' +str(train_acc_log[t])+' Max Test acc: '+ str(max(test_acc_log))+' Max Train acc: '+str(max(train_acc_log)))
 
             for k in range(num_batches): #use tqdm here to show progress bar
                 # Reset buffer containing updates
